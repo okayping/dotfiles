@@ -69,6 +69,9 @@ set mouse=a         " 启用鼠标
 set background=dark
 colorscheme hybrid
 
+set ignorecase 
+set wildmode=longest:list
+
 map FF :Ag<cr>
 
 
