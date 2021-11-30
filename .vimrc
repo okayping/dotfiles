@@ -1,5 +1,4 @@
-
-"==============================================================================
+"=============================================================================
 " vim 插件管理(https://github.com/junegunn/vim-plug)
 "==============================================================================
 call plug#begin('~/.config/nvim/autoload')
@@ -7,72 +6,91 @@ call plug#begin('~/.config/nvim/autoload')
 " 用来提供一个导航目录的侧边栏
 Plug 'scrooloose/nerdtree'
 Plug 'Xuyuanp/nerdtree-git-plugin'
-Plug 'tpope/vim-fugitive'
 Plug 'ryanoasis/vim-devicons'
-
-" vim欢迎页
-Plug 'glepnir/dashboard-nvim'
 
 " Vim状态栏插件，包括显示行号，列号，文件类型，文件名，以及Git状态
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 
 " 主题
-Plug 'dracula/vim', { 'as': 'dracula' }
-Plug 'w0ng/vim-hybrid', { 'as': 'hybrid' }
+Plug 'fatih/molokai'
 
 " 代码补全
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
-
-" 代码片段补全规则
-"Plug 'honza/vim-snippets'
+Plug 'honza/vim-snippets'
 
 " 搜索插件
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
 
+Plug '907th/vim-auto-save'
+
 call plug#end()
-
-"let g:UltiSnipsExpandTrigger="<tab>"
-
-
-"==============================================================================
-" 欢迎页配置
-"==============================================================================
-let g:dashboard_default_executive ='fzf.vim'
-let g:dashboard_fzf_engine ='ag'
-
-let g:mapleader="\<Space>"
-let g:dashboard_default_executive ='fzf'
-nmap <Leader>ss :<C-u>SessionSave<CR>
-nmap <Leader>sl :<C-u>SessionLoad<CR>
-nnoremap <silent> <Leader>fh :DashboardFindHistory<CR>
-nnoremap <silent> <Leader>ff :DashboardFindFile<CR>
-nnoremap <silent> <Leader>tc :DashboardChangeColorscheme<CR>
-nnoremap <silent> <Leader>fa :DashboardFindWord<CR>
-nnoremap <silent> <Leader>fb :DashboardJumpMark<CR>
-nnoremap <silent> <Leader>cn :DashboardNewFile<CR>
 
 
 "==============================================================================
 " vim 自身配置
 "==============================================================================
+"let g:mapleader = ","
+let g:mapleader="\<Space>"
+
 set nocompatible    " 不兼容vi，可以使用某些高级特性
+set noswapfile      " 不生成.swp文件
+set nowrap          " 不换行
 set autowrite       " 自动保存
 set number          " 显示行号
-set ts=4            " tab为4个空格
-set smartindent     " 智能缩进
-set relativenumber  " 显示相对行号
+set tabstop=4       " show existing tab with 4 spaces width
+set shiftwidth=4    " when indenting with '>', use 4 spaces width
+set expandtab       " On pressing tab, insert 4 spaces
+"set relativenumber  " 显示相对行号
 set mouse=a         " 启用鼠标
 
 set background=dark
-colorscheme hybrid
+let g:rehash256 = 1
+let g:molokai_original = 1
+colorscheme molokai
 
-set ignorecase 
+
+" 命令模式下，底部操作指令按下 Tab 键自动补全。第一次按下 Tab，会显示所有匹配的操作指令的清单；第二次按下 Tab，会依次选择各个指令
+"set wildmenu
 set wildmode=longest:list
+set incsearch    " 输入搜索模式时，每输入一个字符，就自动跳到第一个匹配的结果
+set ignorecase   " 搜索时忽略大小写
+
+highlight GitGutterAdd    ctermfg=blue
+highlight GitGutterChange ctermfg=green
+highlight GitGutterDelete ctermfg=red
 
 map FF :Ag<cr>
+
+
+"==============================================================================
+" Plug '907th/vim-auto-save'
+"==============================================================================
+let g:auto_save = 1  " enable AutoSave on Vim startup
+let g:auto_save_silent = 1  " do not display the auto-save notification
+let g:auto_save_write_all_buffers = 1  " write all open buffers as if you would use :wa
+
+
+"==============================================================================return nil, err
+" vim-go配置
+"==============================================================================
+autocmd FileType go nmap <leader>b  <Plug>(go-build)
+autocmd FileType go nmap <leader>r  <Plug>(go-run)
+autocmd FileType go nmap <leader>t  <Plug>(go-test)
+autocmd FileType go nmap <Leader>c <Plug>(go-coverage-toggle)
+
+" 在浏览器里显示测试代码覆盖率
+"autocmd FileType go nmap <Leader>c <Plug>(go-coverage-browser)
+
+" json tag 为驼峰, 比如:userName 而不是user_name
+let g:go_addtags_transform = "camelcase"
+
+"let g:go_highlight_types = 1
+let g:go_highlight_functions = 1
+let g:go_highlight_function_calls = 1
+"let g:go_highlight_fields = 1
 
 
 "==============================================================================return nil, err
@@ -82,11 +100,11 @@ map FF :Ag<cr>
 map ff :NERDTreeToggle<cr>
 
 " 在 vim 启动的时候默认开启 NERDTree：
-autocmd VimEnter * NERDTree 
+autocmd VimEnter * NERDTree
 
 " 将NERDTree的窗口设置在vim窗口的右侧(默认为左侧)：
 " let NERDTreeWinPos="right"
-let NERDTreeWinPos="left"
+"let NERDTreeWinPos="left"
 
 "设定 NERDTree 视窗大小
 let g:NERDTreeWinSize = 35
@@ -276,4 +294,3 @@ nnoremap <silent><nowait> <space>j  :<C-u>CocNext<CR>
 nnoremap <silent><nowait> <space>k  :<C-u>CocPrev<CR>
 " Resume latest coc list.
 nnoremap <silent><nowait> <space>p  :<C-u>CocListResume<CR>
-
